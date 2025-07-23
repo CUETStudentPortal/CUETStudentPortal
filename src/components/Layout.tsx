@@ -56,7 +56,7 @@ export const Layout: React.FC = () => {
               {/* Logo */}
               <div className="flex items-center space-x-2">
                 <GraduationCap className="w-8 h-8 text-sky-600" />
-                <h1 className="text-xl font-bold text-gray-900 hidden sm:block">CUET Portal</h1>
+                <h1 className="text-xl font-bold text-gray-900 hidden sm:block">Ghoorni</h1>
               </div>
             </div>
 
