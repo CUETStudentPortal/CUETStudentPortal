@@ -163,7 +163,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           isPublic: false,
           createdAt: new Date(2025, 0, 12),
           expiresAt: new Date(2025, 0, 18),
-          isActive: true
+          isActive: true,
           eventDate: new Date(2025, 0, 16, 15, 0) // January 16, 2025 at 3:00 PM
         },
         {
