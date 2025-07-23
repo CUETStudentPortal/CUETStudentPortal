@@ -11,7 +11,8 @@ import {
   LogOut,
   GraduationCap,
   Settings,
-  ChevronDown
+  ChevronDown,
+  MessageCircle
 } from 'lucide-react';
 
 export const Layout: React.FC = () => {
@@ -30,6 +31,7 @@ export const Layout: React.FC = () => {
     { path: '/dashboard', icon: Home, label: 'Dashboard' },
     { path: '/notices', icon: Bell, label: 'Notices' },
     { path: '/files', icon: Upload, label: 'Files' },
+    { path: '/questions', icon: MessageCircle, label: 'Q&A' },
     ...(user?.role === 'admin' ? [{ path: '/admin', icon: Settings, label: 'Admin Panel' }] : []),
   ];
 

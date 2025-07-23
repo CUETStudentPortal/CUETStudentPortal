@@ -10,6 +10,7 @@ import { Notices } from './components/Notices';
 import { Files } from './components/Files';
 import { Profile } from './components/Profile';
 import { AdminPanel } from './components/AdminPanel';
+import { QuestionsAnswers } from './components/QuestionsAnswers';
 
 // Initialize demo data
 const initializeDemoData = () => {
@@ -99,6 +100,7 @@ function App() {
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="notices" element={<Notices />} />
                 <Route path="files" element={<Files />} />
+                <Route path="questions" element={<QuestionsAnswers />} />
                 <Route path="profile" element={<Profile />} />
                 <Route path="admin" element={<AdminPanel />} />
               </Route>

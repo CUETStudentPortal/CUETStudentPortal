@@ -70,12 +70,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [notices, setNotices] = useState<Notice[]>([]);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [questions, setQuestions] = useState<Question[]>([]);
 
   useEffect(() => {
     // Load data from localStorage
     const storedNotices = localStorage.getItem('cuet_notices');
     const storedFiles = localStorage.getItem('cuet_files');
     const storedEvents = localStorage.getItem('cuet_events');
+    const storedQuestions = localStorage.getItem('cuet_questions');
 
     if (storedNotices) {
       const parsedNotices = JSON.parse(storedNotices).map((notice: any) => ({
@@ -244,6 +246,95 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setEvents(sampleEvents);
       localStorage.setItem('cuet_events', JSON.stringify(sampleEvents));
     }
+
+    if (storedQuestions) {
+      const parsedQuestions = JSON.parse(storedQuestions).map((question: any) => ({
+        ...question,
+        createdAt: new Date(question.createdAt),
+        answers: question.answers?.map((answer: any) => ({
+          ...answer,
+          createdAt: new Date(answer.createdAt),
+        })) || [],
+      }));
+      setQuestions(parsedQuestions);
+    } else {
+      // Initialize with demo questions
+      const demoQuestions: Question[] = [
+        {
+          id: '1',
+          title: 'How to solve differential equations in MATLAB?',
+          content: 'I am struggling with solving second-order differential equations using MATLAB. Can someone provide a step-by-step guide with examples?',
+          author: 'John Doe',
+          authorId: '1',
+          department: 'Computer Science & Engineering',
+          batch: '2022',
+          category: 'technical',
+          upvotes: 5,
+          createdAt: new Date(2025, 0, 10),
+          answers: [
+            {
+              id: '1',
+              questionId: '1',
+              content: 'You can use the ode45 function in MATLAB. Here\'s a basic example: [t,y] = ode45(@(t,y) [y(2); -y(1)], [0 10], [1; 0]). This solves y\'\' + y = 0 with initial conditions.',
+              author: 'Dr. Ahmed Rahman',
+              authorId: 'teacher1',
+              authorRole: 'teacher',
+              upvotes: 8,
+              createdAt: new Date(2025, 0, 11),
+            }
+          ],
+        },
+        {
+          id: '2',
+          title: 'Best practices for database design?',
+          content: 'What are the key principles I should follow when designing a relational database for a web application?',
+          author: 'Jane Smith',
+          authorId: '2',
+          department: 'Computer Science & Engineering',
+          batch: '2023',
+          category: 'academic',
+          upvotes: 3,
+          createdAt: new Date(2025, 0, 12),
+          answers: [],
+        },
+        {
+          id: '3',
+          title: 'How to prepare for technical interviews?',
+          content: 'I have upcoming technical interviews for software engineering positions. What topics should I focus on and how should I practice?',
+          author: 'Bob Wilson',
+          authorId: '3',
+          department: 'Computer Science & Engineering',
+          batch: '2022',
+          category: 'general',
+          upvotes: 12,
+          createdAt: new Date(2025, 0, 8),
+          answers: [
+            {
+              id: '2',
+              questionId: '3',
+              content: 'Focus on data structures and algorithms. Practice coding problems on LeetCode and HackerRank. Also, review system design concepts for senior positions.',
+              author: 'Alice Johnson',
+              authorId: '5',
+              authorRole: 'student',
+              upvotes: 6,
+              createdAt: new Date(2025, 0, 9),
+            },
+            {
+              id: '3',
+              questionId: '3',
+              content: 'Don\'t forget to practice behavioral questions too. Use the STAR method (Situation, Task, Action, Result) to structure your answers.',
+              author: 'Dr. Sarah Lee',
+              authorId: 'teacher2',
+              authorRole: 'teacher',
+              upvotes: 4,
+              createdAt: new Date(2025, 0, 10),
+            }
+          ],
+        }
+      ];
+      setQuestions(demoQuestions);
+      localStorage.setItem('cuet_questions', JSON.stringify(demoQuestions));
+    }
   }, []);
 
   const addNotice = (noticeData: Omit<Notice, 'id' | 'createdAt'>) => {
@@ -293,6 +384,40 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     localStorage.setItem('cuet_files', JSON.stringify(updatedFiles));
   };
 
+  const addQuestion = (questionData: Omit<Question, 'id' | 'createdAt' | 'answers'>) => {
+    const newQuestion: Question = {
+      ...questionData,
+      id: Date.now().toString(),
+      createdAt: new Date(),
+      answers: [],
+    };
+
+    const updatedQuestions = [newQuestion, ...questions];
+    setQuestions(updatedQuestions);
+    localStorage.setItem('cuet_questions', JSON.stringify(updatedQuestions));
+  };
+
+  const addAnswer = (answerData: Omit<Answer, 'id' | 'createdAt'>) => {
+    const newAnswer: Answer = {
+      ...answerData,
+      id: Date.now().toString(),
+      createdAt: new Date(),
+    };
+
+    const updatedQuestions = questions.map(question => {
+      if (question.id === answerData.questionId) {
+        return {
+          ...question,
+          answers: [...question.answers, newAnswer],
+        };
+      }
+      return question;
+    });
+
+    setQuestions(updatedQuestions);
+    localStorage.setItem('cuet_questions', JSON.stringify(updatedQuestions));
+  };
+
   const getStats = () => {
     const users = JSON.parse(localStorage.getItem('cuet_users') || '[]');
     const now = new Date();
@@ -309,16 +434,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
   };
 
+  const getQuestionStats = () => {
+    const currentUser = JSON.parse(localStorage.getItem('cuet_user') || '{}');
+    const totalAnswers = questions.reduce((sum, question) => sum + question.answers.length, 0);
+    const unansweredQuestions = questions.filter(question => question.answers.length === 0).length;
+    const myQuestions = questions.filter(question => question.authorId === currentUser.id).length;
+
+    return {
+      totalQuestions: questions.length,
+      totalAnswers,
+      unansweredQuestions,
+      myQuestions,
+    };
+  };
+
   const value = {
     notices,
     files,
     events,
+    questions,
     addNotice,
     addFile,
     addEvent,
+    addQuestion,
+    addAnswer,
     deleteNotice,
     deleteFile,
     getStats,
+    getQuestionStats,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
