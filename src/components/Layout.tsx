@@ -121,55 +121,55 @@ export const Layout: React.FC = () => {
           </div>
         </div>
 
-        {/* Sidebar Content - Full height with proper flex layout */}
-        <div className="flex flex-col flex-1 min-h-0">
-          {/* Main Navigation */}
-          <nav className="flex-1 px-4 py-6 overflow-y-auto">
-            <div className="space-y-2">
-              {navigationItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = location.pathname === item.path;
-                
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setSidebarOpen(false)}
-                    className={`
-                      flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200
-                      ${isActive 
-                        ? 'bg-white bg-opacity-20 text-white shadow-lg' 
-                        : 'text-sky-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
-                      }
-                    `}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span className="font-medium">{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </nav>
+{/* Sidebar Content - Full height with pinned bottom */}
+<div className="relative flex flex-col flex-1 min-h-0">
+  {/* Main Navigation */}
+  <nav className="flex-1 px-4 py-6 overflow-y-auto">
+    <div className="space-y-2">
+      {navigationItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = location.pathname === item.path;
 
-          {/* Bottom Profile Section - Fixed at bottom with proper spacing */}
-          <div className="px-4 py-4 mt-auto border-t border-sky-500 border-opacity-30">
-            <Link
-              to="/profile"
-              onClick={() => setSidebarOpen(false)}
-              className={`
-                flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 w-full
-                ${location.pathname === '/profile'
-                  ? 'bg-white bg-opacity-20 text-white shadow-lg' 
-                  : 'text-sky-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
-                }
-              `}
-            >
-              <User className="w-5 h-5" />
-              <span className="font-medium">Manage Profile</span>
-            </Link>
-          </div>
-        </div>
-      </div>
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            onClick={() => setSidebarOpen(false)}
+            className={`
+              flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200
+              ${isActive 
+                ? 'bg-white bg-opacity-20 text-white shadow-lg' 
+                : 'text-sky-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
+              }
+            `}
+          >
+            <Icon className="w-5 h-5" />
+            <span className="font-medium">{item.label}</span>
+          </Link>
+        );
+      })}
+    </div>
+  </nav>
+
+  {/* Bottom Fixed Profile Section */}
+  <div className="absolute bottom-4 left-4 right-4">
+    <Link
+      to="/profile"
+      onClick={() => setSidebarOpen(false)}
+      className={`
+        flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 w-full
+        ${location.pathname === '/profile'
+          ? 'bg-white bg-opacity-20 text-white shadow-lg' 
+          : 'text-sky-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
+        }
+      `}
+    >
+      <User className="w-5 h-5" />
+      <span className="font-medium">Manage Profile</span>
+    </Link>
+  </div>
+</div>
+
 
       {/* Main content - Proper positioning with sidebar offset */}
       <div className="lg:ml-64">
