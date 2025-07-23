@@ -189,6 +189,24 @@ export const Notices: React.FC = () => {
                   </div>
                   <p className="text-gray-600 leading-relaxed">{notice.content}</p>
                   
+                  {notice.eventDate && (
+                    <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="flex items-center space-x-2">
+                        <Calendar className="w-4 h-4 text-blue-600" />
+                        <span className="text-sm font-medium text-blue-800">
+                          Event Date: {notice.eventDate.toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  
                   {notice.attachments && notice.attachments.length > 0 && (
                     <div className="mt-3 flex items-center space-x-2">
                       <Paperclip className="w-4 h-4 text-gray-400" />
@@ -274,6 +292,7 @@ const CreateNoticeModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState<'academic' | 'event' | 'general' | 'announcement' | 'alert'>('general');
   const [priority, setPriority] = useState<'low' | 'medium' | 'high' | 'urgent'>('medium');
+  const [eventDate, setEventDate] = useState('');
   const [expiresIn, setExpiresIn] = useState('7'); // days
   const [isPublic, setIsPublic] = useState(false);
   const [targetBatch, setTargetBatch] = useState('');
@@ -305,6 +324,7 @@ const CreateNoticeModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       priority,
       isPublic: canCreatePublic ? isPublic : false,
       expiresAt,
+      eventDate: eventDate ? new Date(eventDate) : undefined,
       isActive: true,
       attachments: attachments.length > 0 ? attachments : undefined,
     };

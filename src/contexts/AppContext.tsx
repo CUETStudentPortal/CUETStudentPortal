@@ -15,6 +15,7 @@ export interface Notice {
   expiresAt: Date;
   isActive: boolean;
   attachments?: string[];
+  eventDate?: Date;
 }
 
 export interface FileItem {
@@ -84,6 +85,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ...notice,
         createdAt: new Date(notice.createdAt),
         expiresAt: new Date(notice.expiresAt),
+        eventDate: notice.eventDate ? new Date(notice.eventDate) : undefined,
       }));
       setNotices(parsedNotices);
     } else {
@@ -102,7 +104,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           createdAt: new Date(2025, 0, 10),
           expiresAt: new Date(2025, 0, 25),
           isActive: true,
-          attachments: ['exam_schedule.pdf', 'covid_protocols.pdf']
+          attachments: ['exam_schedule.pdf', 'covid_protocols.pdf'],
+          eventDate: new Date(2025, 0, 22, 9, 0) // January 22, 2025 at 9:00 AM
         },
         {
           id: '2',
@@ -161,6 +164,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           createdAt: new Date(2025, 0, 12),
           expiresAt: new Date(2025, 0, 18),
           isActive: true
+          eventDate: new Date(2025, 0, 16, 15, 0) // January 16, 2025 at 3:00 PM
         },
         {
           id: '6',
@@ -190,7 +194,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           createdAt: new Date(2025, 0, 1),
           expiresAt: new Date(2025, 2, 16),
           isActive: true,
-          attachments: ['company_list.pdf', 'registration_guide.pdf']
+          attachments: ['company_list.pdf', 'registration_guide.pdf'],
+          eventDate: new Date(2025, 2, 15, 9, 0) // March 15, 2025 at 9:00 AM
         },
         {
           id: '8',

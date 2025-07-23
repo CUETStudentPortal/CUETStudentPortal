@@ -123,10 +123,10 @@ export const Layout: React.FC = () => {
           </div>
         </div>
 
-{/* Sidebar Content - Full height with pinned bottom */}
-<div className="relative flex flex-col flex-1 min-h-0">
-  {/* Main Navigation */}
-  <nav className="flex-1 px-4 py-6 overflow-y-auto">
+        {/* Sidebar Content */}
+        <div className="flex flex-col h-full">
+          {/* Main Navigation - Takes remaining space */}
+          <nav className="flex-1 px-4 py-6 overflow-y-auto" style={{ height: 'calc(100vh - 128px)' }}>
     <div className="space-y-2">
       {navigationItems.map((item) => {
         const Icon = item.icon;
@@ -162,8 +162,8 @@ export const Layout: React.FC = () => {
         flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 w-full
         ${location.pathname === '/profile'
           ? 'bg-white bg-opacity-20 text-white shadow-lg' 
-          : 'text-sky-100 hover:bg-white hover:bg-opacity-10 hover:text-white'
-        }
+          {/* Bottom Profile Section - Fixed at bottom */}
+          <div className="px-4 py-4 border-t border-sky-500 border-opacity-30">
       `}
     >
       <User className="w-5 h-5" />
